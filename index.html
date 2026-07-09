@@ -1,94 +1,921 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-
+    <title>Apollon Kitchen &amp; Bar</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --accent: #c8a45c;
+            --accent-dark: #a8863a;
+            --dark-bg: #1a1a1a;
+            --warm-light: #f8f5f0;
+            --font-serif: 'Georgia', 'Times New Roman', serif;
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; color: #2c2c2c; }
+
+        .navbar { box-shadow: 0 2px 10px rgba(0,0,0,0.3); backdrop-filter: blur(8px); background: rgba(26,26,26,0.95) !important; }
+        .navbar-brand { font-weight: 700; letter-spacing: 1px; }
+        .navbar .nav-link { position: relative; transition: color 0.3s; }
+        .navbar .nav-link::after { content: ''; position: absolute; bottom: 4px; left: 12px; right: 12px; height: 2px; background: var(--accent); transform: scaleX(0); transition: transform 0.3s; }
+        .navbar .nav-link:hover::after, .navbar .nav-link.active::after { transform: scaleX(1); }
+        .navbar .nav-link:hover { color: var(--accent) !important; }
+
+        .btn-accent { background-color: var(--accent); border-color: var(--accent); color: #fff; border-radius: 50px; padding: 10px 32px; transition: all 0.3s; }
+        .btn-accent:hover { background-color: var(--accent-dark); border-color: var(--accent-dark); color: #fff; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(200,164,92,0.35); }
+        .btn-outline-accent { border-color: var(--accent); color: var(--accent); border-radius: 50px; }
+        .btn-outline-accent:hover { background-color: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-2px); }
+
+        .card { border: none; transition: transform 0.3s, box-shadow 0.3s; border-radius: 12px; overflow: hidden; }
+        .card:hover { transform: translateY(-6px); box-shadow: 0 12px 35px rgba(0,0,0,0.12); }
+        .card-img-top { object-fit: cover; height: 220px; }
+
+        .section-title { position: relative; display: inline-block; font-family: var(--font-serif); letter-spacing: 0.5px; }
+        .section-title::after { content: ''; display: block; width: 60px; height: 3px; background: var(--accent); margin: 12px auto 0; border-radius: 2px; }
+
+        footer a { transition: color 0.2s; }
+        footer a:hover { color: var(--accent) !important; }
+
+        .hero-overlay { background: linear-gradient(135deg, rgba(0,0,0,0.7), rgba(0,0,0,0.3)); }
+
+        .carousel-item .carousel-caption h2,
+        .carousel-item .carousel-caption p,
+        .carousel-item .carousel-caption .btn {
+          opacity: 0;
+          transform: translateY(30px);
+          transition: all 0.7s ease-in-out;
+        }
+        .carousel-item.active .carousel-caption h2,
+        .carousel-item.active .carousel-caption p,
+        .carousel-item.active .carousel-caption .btn {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        .carousel-item.active .carousel-caption h2 { transition-delay: 0.2s; }
+        .carousel-item.active .carousel-caption p { transition-delay: 0.4s; }
+        .carousel-item.active .carousel-caption .btn { transition-delay: 0.6s; }
+
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        .divider { width: 80px; height: 1px; background: var(--accent); margin: 0 auto; opacity: 0.4; }
+
+        .scroll-indicator { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); animation: float 2s ease-in-out infinite; cursor: pointer; }
+        @keyframes float { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(10px); } }
+
+        .price-tag { font-family: var(--font-serif); color: var(--accent); font-weight: 700; }
+        .bg-ambient { position: relative; }
+        .bg-ambient::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 20% 50%, rgba(200,164,92,0.04) 0%, transparent 60%); pointer-events: none; }
+    </style>
 </head>
 
 <body>
 
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                <img src="./img/logo.png" alt="Logo" width="150" height="150" class="d-inline-block align-text-top">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background: var(--dark-bg);">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="#">
+                    <img src="./img/logo.svg" alt="Apollon Kitchen &amp; Bar" width="50" height="50" class="me-2">
+                    <span class="fs-5" style="color: var(--accent);">Apollon</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-2">
+                        <li class="nav-item">
+                            <a class="nav-link px-3 rounded" href="#">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 rounded" href="#carta">Carta</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 rounded" href="#reservas">Reservas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 rounded" href="#experiencia">Experiencia</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 rounded" href="#contacto">Contacto</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Nosotros</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Reservas
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Telefónica</a></li>
-                            <li><a class="dropdown-item" href="#">Por correo electrónico</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="#">Anular reserva</a></li>
+    <main>
+        <section class="hero position-relative overflow-hidden d-flex align-items-center" style="background: url('./img/sala.jpg') center/cover no-repeat; background-attachment: fixed; min-height: 85vh;">
+            <div class="position-absolute top-0 start-0 w-100 h-100 hero-overlay"></div>
+            <div class="position-relative w-100 text-white text-center py-5">
+                <div class="container">
+                    <p class="text-uppercase small mb-3" style="letter-spacing: 4px; color: var(--accent);">Apollon Kitchen &amp; Bar</p>
+                    <h1 class="display-2 fw-bold mb-4" style="font-family: Georgia, serif; text-shadow: 0 2px 20px rgba(0,0,0,0.3);">Una experiencia<br><span style="color: var(--accent);">gastronómica única</span></h1>
+                    <p class="lead fs-4 mb-5 text-white-50" style="max-width: 600px; margin: 0 auto;">Donde la tradición culinaria se encuentra con la innovación en un ambiente elegante y acogedor.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="#reservas" class="btn btn-accent btn-lg px-5">Reservar mesa</a>
+                        <a href="#carta" class="btn btn-accent btn-lg px-5">Descubrir carta</a>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-indicator text-white-50">
+                <i class="bi bi-chevron-down fs-3"></i>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <div id="carouselRestaurante" class="carousel slide carousel-fade mx-auto" style="max-width: 900px;" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carouselRestaurante" data-bs-slide-to="0" class="active"
+                            aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselRestaurante" data-bs-slide-to="1"
+                            aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselRestaurante" data-bs-slide-to="2"
+                            aria-label="Slide 3"></button>
+                    </div>
+                    <div class="carousel-inner" style="max-height: 500px;">
+                        <div class="carousel-item active">
+                            <img src="./img/carousel1.jpg" class="d-block w-100" alt="Restaurante Apollon" loading="lazy" style="object-fit: cover; max-height: 500px;">
+                            <div class="carousel-caption d-none d-md-block text-center">
+                                <h2 class="display-4 text-uppercase fw-bold mb-3" style="letter-spacing: 2px;">Experiencia Gourmet</h2>
+                                <p class="lead text-light mb-4">Disfruta de una velada inolvidable en nuestro elegante comedor.</p>
+                                <a href="#reservas" class="btn btn-outline-light btn-lg px-4 text-uppercase" style="font-size: 0.85rem; letter-spacing: 1px;" data-tipo="degustacion">Reservar mesa</a>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="./img/carousel2.jpg" class="d-block w-100" alt="Barra Apollon" loading="lazy" style="object-fit: cover; max-height: 500px;">
+                            <div class="carousel-caption d-none d-md-block text-center">
+                                <h2 class="display-4 text-uppercase fw-bold mb-3" style="letter-spacing: 2px;">Barra de Cócteles</h2>
+                                <p class="lead text-light mb-4">Nuestros mejores cócteles preparados por expertos mixólogos.</p>
+                                <a href="#cocktails" class="btn btn-outline-light btn-lg px-4 text-uppercase" style="font-size: 0.85rem; letter-spacing: 1px;">Ver Carta</a>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="./img/carousel3.jpg" class="d-block w-100" alt="Terraza Apollon" loading="lazy" style="object-fit: cover; max-height: 500px;">
+                            <div class="carousel-caption d-none d-md-block text-center">
+                                <h2 class="display-4 text-uppercase fw-bold mb-3" style="letter-spacing: 2px;">Terraza Apollon</h2>
+                                <p class="lead text-light mb-4">La mejor experiencia gastronómica al aire libre.</p>
+                                <a href="#terraza" class="btn btn-outline-light btn-lg px-4 text-uppercase" style="font-size: 0.85rem; letter-spacing: 1px;">Descubrir</a>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselRestaurante"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Anterior</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselRestaurante"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Siguiente</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="carta" class="container my-5">
+            <h2 class="text-center mb-5 fw-bold section-title">Nuestra Carta</h2>
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100">
+                        <img src="./img/vinos.jpg" class="card-img-top" alt="Carta de vinos" loading="lazy">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">Carta de Vinos</h5>
+                            <p class="card-text flex-grow-1">Una cuidada selección de los mejores vinos nacionales e internacionales para maridar cada plato.</p>
+                            <a href="#vinos" class="btn btn-accent mt-auto">Ver vinos</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100">
+                        <img src="./img/platos.jpg" class="card-img-top" alt="Carnes y pescado" loading="lazy">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">Carnes y Pescado</h5>
+                            <p class="card-text flex-grow-1">Los mejores cortes de carne y pescados frescos, preparados con técnicas tradicionales e innovadoras.</p>
+                            <a href="#carnes-pescado" class="btn btn-accent mt-auto">Ver carta</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100">
+                        <img src="./img/platos_estrella.jpg" class="card-img-top" alt="Platos de autor" loading="lazy">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">Platos de Autor</h5>
+                            <p class="card-text flex-grow-1">Creaciones exclusivas de nuestro chef, donde la creatividad y la alta cocina se fusionan.</p>
+                            <a href="#platos-autor" class="btn btn-accent mt-auto">Descubrir</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="card h-100">
+                        <img src="./img/postres.jpg" class="card-img-top" alt="Postres" loading="lazy">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">Postres</h5>
+                            <p class="card-text flex-grow-1">Dulces tentaciones artesanales que ponen el broche de oro a una experiencia gastronómica única.</p>
+                            <a href="#postres" class="btn btn-accent mt-auto">Ver postres</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="vinos" class="py-5" style="background: var(--warm-light);">
+            <div class="container">
+                <h2 class="text-center mb-5 fw-bold section-title">Carta de Vinos</h2>
+                <p class="lead text-center mb-5">Una cuidada selección de los mejores vinos nacionales e internacionales para maridar cada plato. Nuestro sumiller recomienda la mejor opción para cada ocasión.</p>
+                <div class="row g-4">
+                    <div class="col-lg-4">
+                        <div class="card h-100 p-4 shadow-sm" style="background: #fff;">
+                            <h4 class="fw-bold mb-3" style="color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 8px;">🍷 Tintos</h4>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Ribera del Duero</strong><br><small class="text-muted">Crianza 2020 · Emilio Moro</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">42€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Ribera del Duero</strong><br><small class="text-muted">Vega Sicilia Único 2012</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">195€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Rioja Gran Reserva</strong><br><small class="text-muted">2015 · Marqués de Riscal</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">58€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Rioja Crianza</strong><br><small class="text-muted">Muga 2021 · Bodegas Muga</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">32€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Priorat</strong><br><small class="text-muted">Clos Mogador 2018</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">72€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Priorat</strong><br><small class="text-muted">Alvaro Palacios L'Ermita 2019</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">180€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Ribera del Duero</strong><br><small class="text-muted">Pingus 2019 · Dominio de Pingus</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">350€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Toro</strong><br><small class="text-muted">Numanthia 2018 · Bodegas Numanthia</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">45€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Rías Baixas</strong><br><small class="text-muted">Albariño Finca Garabelos 2023</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">28€</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <div><strong>Bierzo</strong><br><small class="text-muted">Mencía · Descendientes de J. Palacios 2021</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">38€</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card h-100 p-4 shadow-sm" style="background: #fff;">
+                            <h4 class="fw-bold mb-3" style="color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 8px;">🥂 Blancos y Espumosos</h4>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Verdejo</strong><br><small class="text-muted">José Pariente 2023 · Rueda</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">24€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Verdejo</strong><br><small class="text-muted">Belondrade y Lurton 2022 · Rueda</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">38€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Godello</strong><br><small class="text-muted">Guitián 2022 · Valdeorras</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">32€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Albariño</strong><br><small class="text-muted">Zarate 2023 · Rías Baixas</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">29€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Chardonnay</strong><br><small class="text-muted">Miguel Torres Gran Corona 2021</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">36€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Sauvignon Blanc</strong><br><small class="text-muted">Pazo de Señorans 2023 · Rías Baixas</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">26€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Viura</strong><br><small class="text-muted">Remelluri Blanco 2020 · Rioja</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">34€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Cava Brut Nature</strong><br><small class="text-muted">Recaredo · Corpinnat 2018</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">45€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Champagne</strong><br><small class="text-muted">Moët &amp; Chandon Brut Impérial</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">85€</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <div><strong>Champagne</strong><br><small class="text-muted">Dom Pérignon Vintage 2015</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">220€</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card h-100 p-4 shadow-sm" style="background: #fff;">
+                            <h4 class="fw-bold mb-3" style="color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 8px;">🌍 Internacionales y Dulces</h4>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Bordeaux</strong><br><small class="text-muted">Château Margaux 2014 · Francia</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">290€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Barolo</strong><br><small class="text-muted">Gaja 2018 · Italia</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">165€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Chianti Classico</strong><br><small class="text-muted">Rocca di Montegrossi 2020 · Italia</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">42€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Napa Valley</strong><br><small class="text-muted">Opus One 2018 · California</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">320€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Malbec</strong><br><small class="text-muted">Catena Zapata 2020 · Argentina</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">48€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Carmenere</strong><br><small class="text-muted">Concha y Toro Don Melchor 2019 · Chile</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">55€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Sauternes</strong><br><small class="text-muted">Château d'Yquem 2013 · Francia</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">180€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Oporto</strong><br><small class="text-muted">Graham's Vintage 2016 · Portugal</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">75€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Moscatel</strong><br><small class="text-muted">Mollydooker The Boxer 2022 · Australia</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">55€</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <div><strong>Pedro Ximénez</strong><br><small class="text-muted">Torre Albará 1920 · Montilla-Moriles</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">65€</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <a href="#reservas" class="btn btn-accent btn-lg" data-tipo="cata">Reservar cata de vinos</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="carnes-pescado" class="py-5">
+            <div class="container">
+                <h2 class="text-center mb-5 fw-bold section-title">Carnes y Pescado</h2>
+                <p class="lead text-center mb-5">Los mejores cortes de carne madurada y pescados frescos de lonja, preparados con técnicas tradicionales e innovadoras.</p>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card h-100 p-4 shadow-sm" style="background: var(--warm-light); border: none;">
+                            <h4 class="fw-bold mb-3" style="color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 8px;">🥩 Carnes</h4>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Solomillo de ternera</strong><br><small class="text-muted">Madurado 45 días · guarnición al gusto · salsa demi-glace</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">32€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Entrecot de buey</strong><br><small class="text-muted">500g · madurado 60 días · sal marina y pimienta negra</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">38€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Chuletón de vaca vieja</strong><br><small class="text-muted">800g · Galicia · a la parrilla con pimientos de Padrón</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">48€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Secreto ibérico</strong><br><small class="text-muted">Dehesa de Extremadura · puré de boniato y demi-glace</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">26€</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <div><strong>Cordero lechal</strong><br><small class="text-muted">Asado al horno · guarnición de verduras de temporada</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">28€</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 p-4 shadow-sm" style="background: var(--warm-light); border: none;">
+                            <h4 class="fw-bold mb-3" style="color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 8px;">🐟 Pescados y Mariscos</h4>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Merluza de pincho</strong><br><small class="text-muted">A la vasca · salsa verde con almejas y espárragos</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">27€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Rodaballo salvaje</strong><br><small class="text-muted">Al horno · patatas panadera y verduras asadas</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">34€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Bacalao confitado</strong><br><small class="text-muted">Pil-pil · garbanzos fritos y espinacas salteadas</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">24€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Arroz de mariscos</strong><br><small class="text-muted">Gambas, mejillones y calamares · caldo de pescado</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">29€</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <div><strong>Pulpo a la brasa</strong><br><small class="text-muted">Cachelada · pimentón ahumado y aceite de arbequina</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">26€</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="platos-autor" class="py-5" style="background: var(--warm-light);">
+            <div class="container">
+                <h2 class="text-center mb-5 fw-bold section-title">Platos de Autor</h2>
+                <p class="lead text-center mb-5">Donde la creatividad y la alta cocina se fusionan para sorprenderte en cada bocado. Creaciones exclusivas de nuestro chef con productos de temporada.</p>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm h-100" style="background: #fff;">
+                            <img src="./img/platos_estrella.jpg" class="card-img-top" alt="Entrantes de autor" style="height: 200px; object-fit: cover;">
+                            <div class="card-body p-4">
+                                <h4 class="fw-bold mb-3" style="color: var(--accent);">Entrantes</h4>
+                                <div class="d-flex justify-content-between mb-2"><span>Vieiras con foie y manzana</span> <span class="fw-bold" style="color: var(--accent);">22€</span></div>
+                                <div class="d-flex justify-content-between mb-2"><span>Risotto de setas y trufa negra</span> <span class="fw-bold" style="color: var(--accent);">19€</span></div>
+                                <div class="d-flex justify-content-between mb-2"><span>Tartar de atún rojo con aguacate</span> <span class="fw-bold" style="color: var(--accent);">21€</span></div>
+                                <div class="d-flex justify-content-between"><span>Gazpacho de fresas con sorbete</span> <span class="fw-bold" style="color: var(--accent);">14€</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm h-100" style="background: #fff;">
+                            <img src="./img/carousel1.jpg" class="card-img-top" alt="Platos principales de autor" style="height: 200px; object-fit: cover;">
+                            <div class="card-body p-4">
+                                <h4 class="fw-bold mb-3" style="color: var(--accent);">Principales</h4>
+                                <div class="d-flex justify-content-between mb-2"><span>Lomo de ciervo con salsa de frutos rojos</span> <span class="fw-bold" style="color: var(--accent);">28€</span></div>
+                                <div class="d-flex justify-content-between mb-2"><span>Rape con crema de azafrán y almejas</span> <span class="fw-bold" style="color: var(--accent);">27€</span></div>
+                                <div class="d-flex justify-content-between mb-2"><span>Pichón asado con puré de boniato</span> <span class="fw-bold" style="color: var(--accent);">32€</span></div>
+                                <div class="d-flex justify-content-between"><span>Raviolis de bogavante con salsa americana</span> <span class="fw-bold" style="color: var(--accent);">29€</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card border-0 shadow-sm h-100" style="background: #fff;">
+                            <img src="./img/postres.jpg" class="card-img-top" alt="Postres de autor" style="height: 200px; object-fit: cover;">
+                            <div class="card-body p-4">
+                                <h4 class="fw-bold mb-3" style="color: var(--accent);">Menú Degustación</h4>
+                                <p class="small text-muted">7 pases con maridaje de vinos seleccionados por nuestro sumiller.</p>
+                                <hr>
+                                <div class="d-flex justify-content-between mb-2"><span>Menú degustación (7 pases)</span> <span class="fw-bold" style="color: var(--accent);">72€</span></div>
+                                <div class="d-flex justify-content-between mb-2"><span>Con maridaje de vinos</span> <span class="fw-bold" style="color: var(--accent);">95€</span></div>
+                                <div class="d-flex justify-content-between"><span>Menú vegetariano (6 pases)</span> <span class="fw-bold" style="color: var(--accent);">58€</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <a href="#reservas" class="btn btn-accent btn-lg" data-tipo="degustacion">Reservar menú degustación</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="postres" class="py-5">
+            <div class="container">
+                <h2 class="text-center mb-5 fw-bold section-title">Postres</h2>
+                <p class="lead text-center mb-5">El broche de oro perfecto para una experiencia gastronómica única. Todos nuestros postres son elaborados artesanalmente cada día.</p>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card h-100 p-4 shadow-sm border-0" style="background: var(--warm-light);">
+                            <h4 class="fw-bold mb-3" style="color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 8px;">🍰 Clásicos</h4>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Tarta de queso</strong><br><small class="text-muted">Queso crema · base de galleta · coulis de frutos rojos</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">11€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Tiramisú</strong><br><small class="text-muted">Mascarpone · café espresso · cacao puro</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">10€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Crema catalana</strong><br><small class="text-muted">Canela · limón · caramelo crujiente</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">9€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Flan de huevo casero</strong><br><small class="text-muted">Vainilla · caramelo · nata montada</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">9€</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <div><strong>Arroz con leche</strong><br><small class="text-muted">Canela · limón · caramelo</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">9€</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 p-4 shadow-sm border-0" style="background: var(--warm-light);">
+                            <h4 class="fw-bold mb-3" style="color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 8px;">🍫 De Autor</h4>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Bomba de chocolate</strong><br><small class="text-muted">Chocolate 70% · helado de vainilla · crujiente de avellana</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">13€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Mousse de maracuyá</strong><br><small class="text-muted">Cítrico · merengue tostado · teja de almendra</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">12€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Milhojas de frutas</strong><br><small class="text-muted">Hojaldre · crema pastelera · frutas de temporada</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">12€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Torrija caramelizada</strong><br><small class="text-muted">Brioche · leche merengada · helado de canela</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">11€</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <div><strong>Volcán de chocolate</strong><br><small class="text-muted">Brownie · corazón de chocolate · helado de menta</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">14€</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 p-4 shadow-sm border-0" style="background: var(--warm-light);">
+                            <h4 class="fw-bold mb-3" style="color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 8px;">☕ Cafés y Digestivos</h4>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Café espresso</strong><br><small class="text-muted">Variedad 100% Arábica · origen Etiopía</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">3€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Café de especialidad</strong><br><small class="text-muted">Filtro · Chemex · origen Colombia</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">5€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Café bombón</strong><br><small class="text-muted">Espresso · leche condensada</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">4€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Infusión gourmet</strong><br><small class="text-muted">Selección de tés y tisanas ecológicas</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">4€</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <div><strong>Licor de hierbas</strong><br><small class="text-muted">Digestivo artesanal de la casa</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">6€</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experiencia" class="py-5" style="background: var(--warm-light);">
+            <div class="container">
+                <h2 class="text-center mb-5 fw-bold section-title">Experiencia Gourmet</h2>
+                <div class="row align-items-center g-5">
+                    <div class="col-md-6">
+                        <img src="./img/carousel1.jpg" class="img-fluid rounded shadow" alt="Experiencia Gourmet" loading="lazy">
+                    </div>
+                    <div class="col-md-6">
+                        <h3 class="fw-bold mb-3" style="color: var(--accent);">Alta Cocina en un Entorno Único</h3>
+                        <p class="lead">En Apollon Kitchen &amp; Bar combinamos ingredientes seleccionados con técnicas de vanguardia para ofrecerte una experiencia gastronómica inolvidable.</p>
+                        <p>Nuestro chef ha diseñado un menú que cambia con las estaciones, asegurando siempre los productos más frescos y sabores sorprendentes. Cada plato es una obra de arte cuidadosamente elaborada.</p>
+                        <ul class="list-unstyled mt-4">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--accent);"></i>Menú degustación disponible</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--accent);"></i>Maridaje de vinos recomendado por nuestro sumiller</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--accent);"></i>Posibilidad de eventos privados y celebraciones</li>
                         </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" aria-disabled="true">Privado</a>
-                    </li>
-                </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+                        <a href="#reservas" class="btn btn-accent btn-lg mt-3" data-tipo="degustacion">Reservar ahora</a>
+                    </div>
+                </div>
             </div>
-        </div>
-    </nav>
+        </section>
 
-    <!-- Carousel -->
-    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
-                aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-                aria-label="Slide 3"></button>
+        <section id="cocktails" class="py-5">
+            <div class="container">
+                <h2 class="text-center mb-5 fw-bold section-title">Barra de Cócteles</h2>
+                <p class="lead text-center mb-5">Descubre nuestra selección de cócteles clásicos y de autor, preparados por los mejores mixólogos de la ciudad con licores premium e ingredientes frescos.</p>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card h-100 p-4 shadow-sm border-0" style="background: var(--warm-light);">
+                            <h4 class="fw-bold mb-3" style="color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 8px;">🍸 Clásicos</h4>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Dry Martini</strong><br><small class="text-muted">Ginebra · Vermut seco · Aceituna</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">14€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Negroni</strong><br><small class="text-muted">Ginebra · Campari · Vermut rosso</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">13€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Old Fashioned</strong><br><small class="text-muted">Whisky Bourbon · Azúcar · Angostura</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">15€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Margarita</strong><br><small class="text-muted">Tequila · Triple Sec · Lima</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">12€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Mojito</strong><br><small class="text-muted">Ron · Menta · Lima · Soda</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">11€</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <div><strong>Daiquiri</strong><br><small class="text-muted">Ron · Lima · Azúcar</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">11€</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 p-4 shadow-sm border-0" style="background: var(--warm-light);">
+                            <h4 class="fw-bold mb-3" style="color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 8px;">🍹 De Autor</h4>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Apollon Sour</strong><br><small class="text-muted">Pisco · Maracuyá · Clara de huevo · Amargo de angostura</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">16€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Tinto de Verano Premium</strong><br><small class="text-muted">Vino tinto · Frutos rojos · Hierbabuena · Soda</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">12€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Smoky Basil</strong><br><small class="text-muted">Whisky ahumado · Albahaca · Limón · Miel</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">17€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Passion Spritz</strong><br><small class="text-muted">Aperol · Maracuyá · Prosecco · Soda</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">14€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Gin Tonic Mediterráneo</strong><br><small class="text-muted">Ginebra · Romero · Pomelo · Tónica artesanal</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">15€</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <div><strong>Espresso Martini</strong><br><small class="text-muted">Vodka · Licor de café · Espresso · Crema de cacao</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">14€</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100 p-4 shadow-sm border-0" style="background: var(--warm-light);">
+                            <h4 class="fw-bold mb-3" style="color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 8px;">🥃 Premium y Sin Alcohol</h4>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Whisky Macallan 12</strong><br><small class="text-muted">Single Malt · Doble · Hielo o solo</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">22€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Ginebra Hendrick's</strong><br><small class="text-muted">Tónica Fever-Tree · Pepino · Rosa</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">18€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Ron Zacapa 23</strong><br><small class="text-muted">Centenario · Solo o con hielo</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">20€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Virgin Mojito</strong><br><small class="text-muted">Menta · Lima · Soda · Azúcar moreno</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">8€</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-3">
+                                <div><strong>Sunset Cooler</strong><br><small class="text-muted">Granada · Naranja · Jengibre · Soda</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">9€</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <div><strong>Agua mineral</strong><br><small class="text-muted">Premium · Con o sin gas</small></div>
+                                <span class="fw-bold" style="color: var(--accent);">4€</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                </div>
+            </div>
+        </section>
+
+        <section id="terraza" class="py-5" style="background: var(--warm-light);">
+            <div class="container">
+                <h2 class="text-center mb-5 fw-bold section-title">Terraza Apollon</h2>
+                <div class="row align-items-center g-5">
+                    <div class="col-md-6">
+                        <img src="./img/carousel3.jpg" class="img-fluid rounded shadow" alt="Terraza Apollon" loading="lazy">
+                    </div>
+                    <div class="col-md-6">
+                        <h3 class="fw-bold mb-3" style="color: var(--accent);">Cenas al Aire Libre</h3>
+                        <p class="lead">Disfruta de la mejor experiencia gastronómica bajo las estrellas en nuestra terraza exclusiva.</p>
+                        <p>Con un ambiente íntimo y acogedor, nuestra terraza es el lugar perfecto para una cena romántica, una reunión con amigos o una celebración especial. Rodeado de una decoración cuidada y una iluminación ambientada.</p>
+                        <ul class="list-unstyled mt-4">
+                            <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--accent);"></i>Menú especial de terraza</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--accent);"></i>Música en vivo los fines de semana</li>
+                            <li class="mb-2"><i class="bi bi-check-circle-fill me-2" style="color: var(--accent);"></i>Calefacción disponible para las noches más frescas</li>
+                        </ul>
+                        <a href="#reservas" class="btn btn-accent btn-lg mt-3" data-tipo="terraza">Reservar terraza</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="reservas" class="py-5" style="background: var(--dark-bg);">
+            <div class="container">
+                <h2 class="text-center mb-4 fw-bold section-title" style="color: #fff;">Reservar Experiencia</h2>
+                <p class="lead text-center mb-5 text-white-50">Se requiere un <strong class="text-white">20% de anticipo</strong> para confirmar la reserva. Ese importe se descontará del total el día del evento.</p>
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="card p-5 shadow" style="background: #222; border: 1px solid #333;">
+                            <form id="formReserva">
+                                <div class="row g-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label text-white-50 small">Nombre completo</label>
+                                        <input type="text" class="form-control form-control-lg bg-dark text-white border-secondary" placeholder="Tu nombre" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label text-white-50 small">Email</label>
+                                        <input type="email" class="form-control form-control-lg bg-dark text-white border-secondary" placeholder="correo@ejemplo.com" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label text-white-50 small">Teléfono</label>
+                                        <input type="tel" class="form-control form-control-lg bg-dark text-white border-secondary" placeholder="+34 612 345 678" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label text-white-50 small">Tipo de reserva</label>
+                                        <select class="form-select form-select-lg bg-dark text-white border-secondary" id="tipoReserva" onchange="calcularReserva()">
+                                            <option value="degustacion" data-precio="72">Menú degustación (72€/persona)</option>
+                                            <option value="cata" data-precio="55">Cata de vinos (55€/persona)</option>
+                                            <option value="terraza" data-precio="65">Cena en terraza (65€/persona)</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label text-white-50 small">Nº de personas</label>
+                                        <input type="number" class="form-control form-control-lg bg-dark text-white border-secondary" id="numPersonas" value="2" min="1" max="20" onchange="calcularReserva()">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label text-white-50 small">Fecha</label>
+                                        <input type="date" class="form-control form-control-lg bg-dark text-white border-secondary" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="form-label text-white-50 small">Hora</label>
+                                        <input type="time" class="form-control form-control-lg bg-dark text-white border-secondary" required>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 p-4 rounded" style="background: #1a1a1a; border: 1px solid var(--accent);">
+                                    <h5 class="fw-bold mb-3" style="color: var(--accent);">Resumen del pago</h5>
+                                    <div class="d-flex justify-content-between text-white-50 mb-2">
+                                        <span>Precio por persona</span>
+                                        <span id="precioPersona">72€</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between text-white-50 mb-2">
+                                        <span>Nº de personas</span>
+                                        <span id="totalPersonas">2</span>
+                                    </div>
+                                    <hr style="border-color: #333;">
+                                    <div class="d-flex justify-content-between text-white mb-2">
+                                        <span class="fw-bold">Total</span>
+                                        <span class="fw-bold" id="totalReserva" style="color: var(--accent);">144€</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between text-white-50 mb-2">
+                                        <span>Anticipo 20% (se descuenta el día del evento)</span>
+                                        <span class="fw-bold text-warning" id="anticipo">28.80€</span>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-accent btn-lg w-100 mt-4">Confirmar reserva — Pagar anticipo</button>
+                                <p class="text-white-50 small text-center mt-3 mb-0">Recibirás un email de confirmación con los detalles. El 20% de anticipo se descontará del total el día de tu visita.</p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function getTipoLabel(val) {
+            const map = { degustacion: 'Menú degustación', cata: 'Cata de vinos', terraza: 'Cena en terraza' };
+            return map[val] || 'Reserva';
+        }
+
+        function calcularReserva() {
+            const select = document.getElementById('tipoReserva');
+            const precio = parseInt(select.options[select.selectedIndex].getAttribute('data-precio'));
+            const personas = parseInt(document.getElementById('numPersonas').value) || 1;
+            const total = precio * personas;
+            const anticipo = total * 0.2;
+
+            document.getElementById('precioPersona').textContent = precio + '€';
+            document.getElementById('totalPersonas').textContent = personas;
+            document.getElementById('totalReserva').textContent = total + '€';
+            document.getElementById('anticipo').textContent = anticipo.toFixed(2) + '€';
+        }
+
+        document.querySelectorAll('[data-tipo]').forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                sessionStorage.setItem('reservaTipo', this.getAttribute('data-tipo'));
+            });
+        });
+
+        function aplicarTipoReserva() {
+            var tipo = sessionStorage.getItem('reservaTipo');
+            if (tipo) {
+                var select = document.getElementById('tipoReserva');
+                if (select.querySelector('option[value="' + tipo + '"]')) {
+                    select.value = tipo;
+                }
+                calcularReserva();
+                sessionStorage.removeItem('reservaTipo');
+            }
+            if (location.hash === '#reservas') {
+                setTimeout(function() {
+                    document.getElementById('reservas').scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', aplicarTipoReserva);
+        window.addEventListener('hashchange', aplicarTipoReserva);
+
+        document.getElementById('formReserva').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var tipo = document.getElementById('tipoReserva').value;
+            var personas = document.getElementById('numPersonas').value;
+            var total = document.getElementById('totalReserva').textContent;
+            var anticipo = document.getElementById('anticipo').textContent;
+            alert('✅ ' + getTipoLabel(tipo) + ' reservada para ' + personas + ' persona(s).\nTotal: ' + total + '\nAnticipo (20%): ' + anticipo + '\n\nRecibirás un email con los detalles del pago.');
+        });
+
+        document.querySelectorAll('section[id]').forEach(function(s) { if (!s.classList.contains('hero')) { s.classList.add('reveal'); if (s.id === 'reservas') s.classList.add('visible'); } });
+        document.querySelectorAll('.reveal').forEach(function(el) {
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+                });
+            }, { threshold: 0.15 });
+            observer.observe(el);
+        });
+
+        var sections = document.querySelectorAll('section[id]');
+        var navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+        window.addEventListener('scroll', function() {
+            var current = '';
+            sections.forEach(function(section) {
+                var top = section.offsetTop - 200;
+                if (window.scrollY >= top) { current = section.getAttribute('id'); }
+            });
+            navLinks.forEach(function(link) {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) { link.classList.add('active'); }
+            });
+        });
+    </script>
+
+    <footer id="contacto" style="background: var(--dark-bg);" class="text-white pt-5 pb-4 mt-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="./img/logo.svg" alt="Apollon" width="45" height="45" class="me-2">
+                        <span class="fs-4 fw-bold" style="color: var(--accent);">Apollon Kitchen &amp; Bar</span>
+                    </div>
+                    <p class="text-white-50 small">Donde la tradición culinaria se encuentra con la innovación. Disfruta de una experiencia gastronómica única en un ambiente elegante y acogedor.</p>
+                    <div class="d-flex gap-3 mt-3">
+                        <a href="#" class="text-white-50 text-decoration-none fs-5" title="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white-50 text-decoration-none fs-5" title="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-white-50 text-decoration-none fs-5" title="Twitter/X"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="text-white-50 text-decoration-none fs-5" title="TripAdvisor"><i class="bi bi-tripadvisor"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4">
+                    <h6 class="fw-bold mb-3" style="color: var(--accent);">Enlaces</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Inicio</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Nosotros</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Carta</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Reservas</a></li>
+                        <li class="mb-2"><a href="#" class="text-white-50 text-decoration-none">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    <h6 class="fw-bold mb-3" style="color: var(--accent);">Horario</h6>
+                    <ul class="list-unstyled small text-white-50">
+                        <li class="mb-2"><span class="text-white">Lunes - Viernes:</span> 13:00 - 16:00 / 20:00 - 23:30</li>
+                        <li class="mb-2"><span class="text-white">Sábados:</span> 13:00 - 16:30 / 20:00 - 00:00</li>
+                        <li class="mb-2"><span class="text-white">Domingos:</span> 13:00 - 16:30</li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    <h6 class="fw-bold mb-3" style="color: var(--accent);">Contacto</h6>
+                    <ul class="list-unstyled small text-white-50">
+                        <li class="mb-2"><i class="bi bi-geo-alt me-2"></i>Calle Mayor, 42, 28001 Madrid</li>
+                        <li class="mb-2"><i class="bi bi-telephone me-2"></i>+34 912 345 678</li>
+                        <li class="mb-2"><i class="bi bi-envelope me-2"></i>info@apollonkitchen.com</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4" style="border-color: rgba(255,255,255,0.1);">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="small text-white-50 mb-0">&copy; 2026 Apollon Kitchen &amp; Bar. Todos los derechos reservados.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="#" class="text-white-50 text-decoration-none small me-3">Aviso legal</a>
+                    <a href="#" class="text-white-50 text-decoration-none small me-3">Política de privacidad</a>
+                    <a href="#" class="text-white-50 text-decoration-none small">Cookies</a>
+                </div>
+            </div>
         </div>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="./img/foto01.png" class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="..." class="d-block w-100" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="..." class="d-block w-100" alt="...">
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
-            data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
-            data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
